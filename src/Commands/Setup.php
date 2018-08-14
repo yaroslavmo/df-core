@@ -25,7 +25,7 @@ class Setup extends Command
      *
      * @var string
      */
-    protected $description = 'Setup DreamFactory 2.0 instance.';
+    protected $description = 'Setup DreamFactory';
 
     /**
      * Create a new command instance.
@@ -67,7 +67,7 @@ class Setup extends Command
                 if (false === $this->option('no-app-key')) {
                     $this->call('key:generate');
                 } else {
-                    $this->info('Skipping APP_KEY generate.');
+                    $this->info('Skipping APP_KEY generation.');
                 }
             }
 
@@ -77,7 +77,7 @@ class Setup extends Command
 
             $this->info('Running Migrations...');
             $this->call('migrate', ['--force' => $force]);
-            $this->info('Migration completed successfully.');
+            $this->info('Database migration was successful.');
             $this->info('**********************************************************************************************************************');
 
             $this->info('**********************************************************************************************************************');
@@ -100,19 +100,19 @@ class Setup extends Command
                 }
 
                 if (empty($firstName)) {
-                    $firstName = ($prompt) ? $this->ask('Enter your first name') : 'FirstName';
+                    $firstName = ($prompt) ? $this->ask('Enter your first name:') : 'FirstName';
                 }
                 if (empty($lastName)) {
-                    $lastName = ($prompt) ? $this->ask('Enter your last name') : 'LastName';
+                    $lastName = ($prompt) ? $this->ask('Enter your last name:') : 'LastName';
                 }
                 if (empty($email)) {
-                    $email = $this->ask('Enter your email address?');
+                    $email = $this->ask('Enter your e-mail address:');
                 }
                 if (empty($password)) {
-                    $password = $this->secret('Choose a password');
+                    $password = $this->secret('Choose a password:');
                 }
 
-                $passwordConfirm = ($prompt) ? $this->secret('Re-enter password') : $password;
+                $passwordConfirm = ($prompt) ? $this->secret('Re-enter password:') : $password;
                 $displayName = empty($displayName) ? $firstName . ' ' . $lastName : $displayName;
 
                 $data = [
@@ -127,7 +127,7 @@ class Setup extends Command
                 $user = User::createFirstAdmin($data);
 
                 if (!$user) {
-                    $this->error('Failed to create user.' . print_r($data['errors'], true));
+                    $this->error('Failed to create first admin user.' . print_r($data['errors'], true));
                     $this->info('Please try again...');
                 }
             }
